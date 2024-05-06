@@ -1,0 +1,25 @@
+{
+	"name": "RunCopyPostsDailyPipeline",
+	"properties": {
+		"description": "Schedule running the copyPostsDaily pipeline",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "copyPostsDaily",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 1,
+				"startTime": "2024-05-06T09:38:00",
+				"timeZone": "Arab Standard Time"
+			}
+		}
+	}
+}
