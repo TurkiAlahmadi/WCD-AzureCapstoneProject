@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-cp2"
+		},
+		"ls_my_blob_strg_connectionString": {
+			"value": ""
+		},
+		"ls_wcd_blob_connectionString": {
+			"value": "DefaultEndpointsProtocol=https;AccountName=wcddestorageexternal;"
+		},
+		"AzureKeyVault_properties_typeProperties_baseUrl": {
+			"value": "https://cp2kv.vault.azure.net/"
+		},
+		"ls_rds_pg_properties_typeProperties_server": {
+			"value": "de-rds.czm23kqmbd6o.ca-central-1.rds.amazonaws.com"
+		},
+		"ls_rds_pg_properties_typeProperties_database": {
+			"value": "stack"
+		},
+		"ls_rds_pg_properties_typeProperties_username": {
+			"value": "postgres"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

@@ -1,0 +1,85 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adf-cp2"
+		},
+		"ls_my_blob_strg_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_my_blob_strg'"
+		},
+		"ls_wcd_blob_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_wcd_blob'",
+			"defaultValue": "DefaultEndpointsProtocol=https;AccountName=wcddestorageexternal;"
+		},
+		"AzureKeyVault_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://cp2kv.vault.azure.net/"
+		},
+		"ls_rds_pg_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "de-rds.czm23kqmbd6o.ca-central-1.rds.amazonaws.com"
+		},
+		"ls_rds_pg_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "stack"
+		},
+		"ls_rds_pg_properties_typeProperties_username": {
+			"type": "string",
+			"defaultValue": "postgres"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "adf-cp2_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"ls_my_blob_strg_connectionString": {
+						"value": "[parameters('ls_my_blob_strg_connectionString')]"
+					},
+					"ls_wcd_blob_connectionString": {
+						"value": "[parameters('ls_wcd_blob_connectionString')]"
+					},
+					"AzureKeyVault_properties_typeProperties_baseUrl": {
+						"value": "[parameters('AzureKeyVault_properties_typeProperties_baseUrl')]"
+					},
+					"ls_rds_pg_properties_typeProperties_server": {
+						"value": "[parameters('ls_rds_pg_properties_typeProperties_server')]"
+					},
+					"ls_rds_pg_properties_typeProperties_database": {
+						"value": "[parameters('ls_rds_pg_properties_typeProperties_database')]"
+					},
+					"ls_rds_pg_properties_typeProperties_username": {
+						"value": "[parameters('ls_rds_pg_properties_typeProperties_username')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
