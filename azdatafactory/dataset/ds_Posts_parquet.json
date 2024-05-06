@@ -1,0 +1,23 @@
+{
+	"name": "ds_Posts_parquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_wcd_blob",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "adf-datasets"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "Posts_today",
+				"container": "de-project-st"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}

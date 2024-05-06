@@ -4,8 +4,74 @@
 		"description": "Copy Posts parquet files daily from an external Azure blob storage container",
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "Copy Posts",
+				"description": "Copy posts from an external Azure blob storage",
 				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Delete Posts",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"wildcardFileName": "*.parquet",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "ParquetReadSettings"
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_Posts_parquet",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_Posts_load_wcdblob_to_myblob",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Delete Posts",
+				"description": "Delete posts from Posts directoory",
+				"type": "Delete",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -16,7 +82,23 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"enableStaging": false
+					"dataset": {
+						"referenceName": "ds_Posts_load_wcdblob_to_myblob",
+						"type": "DatasetReference"
+					},
+					"logStorageSettings": {
+						"linkedServiceName": {
+							"referenceName": "ls_my_blob_strg",
+							"type": "LinkedServiceReference"
+						},
+						"path": "bd-project/Landing"
+					},
+					"enableLogging": true,
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					}
 				}
 			}
 		],

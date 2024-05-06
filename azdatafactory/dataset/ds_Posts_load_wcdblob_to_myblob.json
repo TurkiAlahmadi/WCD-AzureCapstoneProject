@@ -1,0 +1,23 @@
+{
+	"name": "ds_Posts_load_wcdblob_to_myblob",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_my_blob_strg",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "adf-datasets"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "Landing/Posts",
+				"container": "bd-project"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}

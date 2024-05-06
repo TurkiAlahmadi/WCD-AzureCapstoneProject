@@ -1,0 +1,27 @@
+{
+	"name": "ds_Users_load_rds_to_myblob",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_my_blob_strg",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "adf-datasets"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "rds-Users.csv",
+				"folderPath": "Landing/Users",
+				"container": "bd-project"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
