@@ -10,6 +10,12 @@
 					"referenceName": "copyOnceWeek",
 					"type": "PipelineReference"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "copyPostsDaily",
+					"type": "PipelineReference"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
