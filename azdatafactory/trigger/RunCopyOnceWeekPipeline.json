@@ -1,7 +1,7 @@
 {
-	"name": "RunCopyPostsDailyPipeline",
+	"name": "RunCopyOnceWeekPipeline",
 	"properties": {
-		"description": "Schedule running the copyPostsDaily pipeline",
+		"description": "Schedule running the copyOnceWeek pipeline",
 		"annotations": [],
 		"runtimeState": "Started",
 		"pipelines": [
@@ -10,12 +10,18 @@
 					"referenceName": "copyPostsDaily",
 					"type": "PipelineReference"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "copyOnceWeek",
+					"type": "PipelineReference"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
 		"typeProperties": {
 			"recurrence": {
-				"frequency": "Day",
+				"frequency": "Week",
 				"interval": 1,
 				"startTime": "2024-05-06T09:38:00",
 				"timeZone": "Arab Standard Time",
@@ -25,6 +31,9 @@
 					],
 					"hours": [
 						2
+					],
+					"weekDays": [
+						"Friday"
 					]
 				}
 			}
