@@ -1,0 +1,19 @@
+{
+	"name": "ls_wcd_blob",
+	"properties": {
+		"description": "Linked service to connect to WCD blob storage",
+		"annotations": [],
+		"type": "AzureBlobStorage",
+		"typeProperties": {
+			"connectionString": "DefaultEndpointsProtocol=https;AccountName=wcddestorageexternal;",
+			"accountKey": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "AzureKeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "WCDBlobStrgKey"
+			}
+		}
+	}
+}
