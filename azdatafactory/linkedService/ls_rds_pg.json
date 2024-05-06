@@ -1,0 +1,24 @@
+{
+	"name": "ls_rds_pg",
+	"properties": {
+		"description": "Linked service for PostgreSQL DB",
+		"annotations": [],
+		"type": "PostgreSqlV2",
+		"typeProperties": {
+			"server": "de-rds.czm23kqmbd6o.ca-central-1.rds.amazonaws.com",
+			"port": 5432,
+			"database": "stack",
+			"username": "postgres",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "AzureKeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "PostgreSqlPassword"
+			},
+			"sslMode": 2,
+			"authenticationType": "Basic"
+		}
+	}
+}
