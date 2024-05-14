@@ -57,7 +57,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "ds_Posts_parquet",
+						"referenceName": "TestPipeline",
 						"type": "DatasetReference"
 					}
 				],
@@ -91,7 +91,7 @@
 							"referenceName": "ls_my_blob_strg",
 							"type": "LinkedServiceReference"
 						},
-						"path": "bd-project/Landing"
+						"path": "bd-project/Landing/DailyDeletesLog"
 					},
 					"enableLogging": true,
 					"storeSettings": {
@@ -100,8 +100,184 @@
 						"enablePartitionDiscovery": false
 					}
 				}
+			},
+			{
+				"name": "Retry Loop",
+				"description": "Executes a set of activities in a loop for a specific duration.",
+				"type": "Until",
+				"dependsOn": [
+					{
+						"activity": "Copy Posts",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@variables('FilesCopied')",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Check Post Files Existence",
+							"description": "Check that files are copied",
+							"type": "GetMetadata",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "TestPipeline",
+									"type": "DatasetReference"
+								},
+								"fieldList": [
+									"exists"
+								],
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "ParquetReadSettings"
+								}
+							}
+						},
+						{
+							"name": "Posts Conditional Action",
+							"description": "Make an action depending on post files existence",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Check Post Files Existence",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@bool(activity('Check Post Files Existence').output.exists)",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "Retry WaitTime",
+										"description": "Set the time till the next copy retry attempt",
+										"type": "Wait",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"waitTimeInSeconds": 60
+										}
+									}
+								],
+								"ifTrueActivities": [
+									{
+										"name": "Set FilesCopied",
+										"description": "Set the pipeline variable to true indicating successful copy attempt",
+										"type": "SetVariable",
+										"dependsOn": [
+											{
+												"activity": "Copy Posts Another Attempt",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "FilesCopied",
+											"value": {
+												"value": "@bool(true)",
+												"type": "Expression"
+											}
+										}
+									},
+									{
+										"name": "Copy Posts Another Attempt",
+										"description": "Copy posts from an external Azure blob storage",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "ParquetSource",
+												"storeSettings": {
+													"type": "AzureBlobStorageReadSettings",
+													"recursive": true,
+													"wildcardFileName": "*.parquet",
+													"enablePartitionDiscovery": false
+												},
+												"formatSettings": {
+													"type": "ParquetReadSettings"
+												}
+											},
+											"sink": {
+												"type": "ParquetSink",
+												"storeSettings": {
+													"type": "AzureBlobStorageWriteSettings"
+												},
+												"formatSettings": {
+													"type": "ParquetWriteSettings"
+												}
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "TestPipeline",
+												"type": "DatasetReference"
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "ds_Posts_load_wcdblob_to_myblob",
+												"type": "DatasetReference"
+											}
+										]
+									}
+								]
+							}
+						}
+					],
+					"timeout": "0.01:15:00"
+				}
 			}
 		],
+		"variables": {
+			"FilesCopied": {
+				"type": "Boolean",
+				"defaultValue": false
+			}
+		},
 		"folder": {
 			"name": "adf-pipeliens"
 		},
