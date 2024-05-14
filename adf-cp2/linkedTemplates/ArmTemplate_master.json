@@ -9,7 +9,8 @@
 		},
 		"ls_my_blob_strg_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'ls_my_blob_strg'"
+			"metadata": "Secure string for 'connectionString' of 'ls_my_blob_strg'",
+			"defaultValue": "DefaultEndpointsProtocol=https;AccountName=cp2dl;EndpointSuffix=core.windows.net;"
 		},
 		"ls_wcd_blob_connectionString": {
 			"type": "secureString",
