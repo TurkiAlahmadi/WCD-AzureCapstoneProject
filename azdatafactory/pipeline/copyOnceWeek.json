@@ -120,7 +120,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@variables('FilesCopied')",
+						"value": "@variables('UserFileCopied')",
 						"type": "Expression"
 					},
 					"activities": [
@@ -147,6 +147,7 @@
 								],
 								"storeSettings": {
 									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
 									"enablePartitionDiscovery": false
 								},
 								"formatSettings": {
@@ -225,7 +226,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@variables('FilesCopied')",
+						"value": "@variables('PostTypeFileCopied')",
 						"type": "Expression"
 					},
 					"activities": [
@@ -252,6 +253,7 @@
 								],
 								"storeSettings": {
 									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
 									"enablePartitionDiscovery": false
 								},
 								"formatSettings": {
