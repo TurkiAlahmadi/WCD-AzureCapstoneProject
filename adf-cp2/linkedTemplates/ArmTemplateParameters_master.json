@@ -14,6 +14,9 @@
 		"AzureKeyVault_properties_typeProperties_baseUrl": {
 			"value": "https://cp2kv.vault.azure.net/"
 		},
+		"ls_adb_properties_typeProperties_existingClusterId": {
+			"value": "0507-090224-vb52glii"
+		},
 		"ls_rds_pg_properties_typeProperties_server": {
 			"value": "de-rds.czm23kqmbd6o.ca-central-1.rds.amazonaws.com"
 		},
