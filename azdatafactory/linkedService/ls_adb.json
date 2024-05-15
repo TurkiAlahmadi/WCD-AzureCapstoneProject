@@ -1,0 +1,20 @@
+{
+	"name": "ls_adb",
+	"properties": {
+		"description": "A linked service to connect Azure data factory to Azure databricks",
+		"annotations": [],
+		"type": "AzureDatabricks",
+		"typeProperties": {
+			"domain": "https://adb-1412098956733792.12.azuredatabricks.net",
+			"accessToken": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "AzureKeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "AzDatabrickTkn"
+			},
+			"existingClusterId": "0507-090224-vb52glii"
+		}
+	}
+}
