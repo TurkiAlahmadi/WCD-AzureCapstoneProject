@@ -9,7 +9,7 @@
 				"type": "Until",
 				"dependsOn": [
 					{
-						"activity": "If Condition1",
+						"activity": "Check If Files Exist",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -23,7 +23,7 @@
 					},
 					"activities": [
 						{
-							"name": "Posts Conditional Action",
+							"name": "Copy Posts Conditional Action",
 							"description": "Make an action depending on post files existence",
 							"type": "IfCondition",
 							"dependsOn": [
@@ -68,7 +68,7 @@
 										"dependsOn": [],
 										"userProperties": [],
 										"typeProperties": {
-											"waitTimeInSeconds": 60
+											"waitTimeInSeconds": 1800
 										}
 									}
 								]
@@ -121,7 +121,7 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "TestPipeline",
+									"referenceName": "ds_Posts_parquet",
 									"type": "DatasetReference"
 								}
 							],
@@ -133,12 +133,12 @@
 							]
 						}
 					],
-					"timeout": "0.00:5:00"
+					"timeout": "0.01:00:00"
 				}
 			},
 			{
 				"name": "Check FilesCopied",
-				"description": "Check if files are not copied at this point, then trigger a fail activity if so",
+				"description": "Check if files are not copied at this point, then trigger a fail activity if so. Otherwise, run the Databricks notebook",
 				"type": "IfCondition",
 				"dependsOn": [
 					{
@@ -182,7 +182,7 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"notebookPath": "/Shared/01 Model Deployment"
+								"notebookPath": "/Repos/turki.alahmadi@uzh.ch/WCD-AzureCapstoneProject/databricks/5_Model_Prediction"
 							},
 							"linkedServiceName": {
 								"referenceName": "ls_adb",
@@ -207,14 +207,16 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "TestPipeline",
+						"referenceName": "ds_Posts_load_wcdblob_to_myblob",
 						"type": "DatasetReference"
 					},
 					"fieldList": [
-						"childItems"
+						"childItems",
+						"exists"
 					],
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
@@ -223,7 +225,8 @@
 				}
 			},
 			{
-				"name": "If Condition1",
+				"name": "Check If Files Exist",
+				"description": "An if condition activity that helps in deleting files only if the exist",
 				"type": "IfCondition",
 				"dependsOn": [
 					{
@@ -236,12 +239,12 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@greater(activity('Get Metadata').output.childItems,0)",
+						"value": "@bool(activity('Get Metadata').output.exists)",
 						"type": "Expression"
 					},
 					"ifTrueActivities": [
 						{
-							"name": "Delete Posts_copy1",
+							"name": "Delete Posts",
 							"description": "Delete posts from Posts directoory",
 							"type": "Delete",
 							"dependsOn": [],
