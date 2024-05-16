@@ -1,0 +1,17 @@
+{
+	"name": "Unique tags",
+	"properties": {
+		"content": {
+			"query": "-- The number of unique tags\nSELECT COUNT(DISTINCT tag) AS unique_tags\nFROM\n    OPENROWSET(\n        BULK 'https://bdcpstorage.dfs.core.windows.net/bgcp-container/Predictions/predictions_2024-05-16_18-12-47.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION = '2.0',\n        HEADER_ROW = TRUE\n    ) AS [result];\n\n-- There are about 459 unique tags",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "master",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

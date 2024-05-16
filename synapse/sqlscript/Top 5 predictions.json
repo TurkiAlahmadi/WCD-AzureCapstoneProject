@@ -2,7 +2,7 @@
 	"name": "Top 5 predictions",
 	"properties": {
 		"content": {
-			"query": "SELECT\n   TOP 5 tag, COUNT(*) as quantity\nFROM\n    OPENROWSET(\n        BULK 'https://cp2dl.dfs.core.windows.net/bd-project/Predictions/predictions_2024-05-16_09-59-55.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION = '2.0',\n        HEADER_ROW = TRUE\n    ) AS [result]\n\nGROUP BY tag\nORDER BY quantity DESC\n",
+			"query": "-- The top 5 predictions made by the ML model\nSELECT\n   TOP 5 tag, COUNT(*) as quantity\nFROM\n    OPENROWSET(\n        BULK 'https://cp2dl.dfs.core.windows.net/bd-project/Predictions/predictions_2024-05-16_18-12-47.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION = '2.0',\n        HEADER_ROW = TRUE\n    ) AS [result]\n\nGROUP BY tag\nORDER BY quantity DESC\n",
 			"metadata": {
 				"language": "sql"
 			},

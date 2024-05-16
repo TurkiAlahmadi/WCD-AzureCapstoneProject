@@ -1,0 +1,17 @@
+{
+	"name": "Tag Frequency Distribution",
+	"properties": {
+		"content": {
+			"query": "-- Getting the Tag Frequency Distribution\nSELECT\n    COUNT(*) AS tag_count,\n    COUNT(CASE WHEN tag_freq = 1 THEN 1 END) AS tags_appearing_once,\n    COUNT(CASE WHEN tag_freq = 2 THEN 1 END) AS tags_appearing_twice,\n    COUNT(CASE WHEN tag_freq = 3 THEN 1 END) AS tags_appearing_thrice,\n    COUNT(CASE WHEN tag_freq >= 4 THEN 1 END) AS tags_appearing_4_or_more_times\nFROM\n    (\n        SELECT\n            tag,\n            COUNT(*) AS tag_freq\n        FROM\n            OPENROWSET(\n                BULK 'https://bdcpstorage.dfs.core.windows.net/bgcp-container/Predictions/predictions_2024-05-16_18-12-47.csv',\n                FORMAT = 'CSV',\n                PARSER_VERSION = '2.0',\n                HEADER_ROW = TRUE\n            ) AS [result]\n        GROUP BY tag\n    ) AS tag_freq_table\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "master",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

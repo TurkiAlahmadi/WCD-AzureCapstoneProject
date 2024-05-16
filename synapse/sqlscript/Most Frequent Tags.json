@@ -1,0 +1,17 @@
+{
+	"name": "Most Frequent Tags",
+	"properties": {
+		"content": {
+			"query": "-- Getting the Most Frequent Tags\nSELECT TOP 10 tag, COUNT(*) AS count\nFROM\n    OPENROWSET(\n        BULK 'https://bdcpstorage.dfs.core.windows.net/bgcp-container/Predictions/predictions_2024-05-16_18-12-47.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION = '2.0',\n        HEADER_ROW = TRUE\n    ) AS [result]\nGROUP BY tag\nORDER BY count DESC\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "master",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
