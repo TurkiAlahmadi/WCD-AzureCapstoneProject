@@ -242,8 +242,8 @@
 				}
 			},
 			{
-				"name": "Check FilesCopied",
-				"description": "Check if files are not copied at this point, then trigger a fail activity if so",
+				"name": "Check User FilesCopied",
+				"description": "Handle User copy failure case",
 				"type": "IfCondition",
 				"dependsOn": [
 					{
@@ -261,13 +261,13 @@
 					},
 					"ifFalseActivities": [
 						{
-							"name": "Copy Files Failure",
+							"name": "Copy Users Files Failure",
 							"description": "A fail activity associated with the status of copying files from source",
 							"type": "Fail",
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
-								"message": "Post files were not copied from source",
+								"message": "User files were not copied from the source",
 								"errorCode": "CopyError"
 							}
 						}
@@ -275,7 +275,8 @@
 				}
 			},
 			{
-				"name": "If Condition1",
+				"name": "Check PostTypeFilesCopied",
+				"description": "Handle PostType copy failure case",
 				"type": "IfCondition",
 				"dependsOn": [
 					{
@@ -293,13 +294,13 @@
 					},
 					"ifFalseActivities": [
 						{
-							"name": "Copy Files Failure",
+							"name": "Copy PostType Files Failure",
 							"description": "A fail activity associated with the status of copying files from source",
 							"type": "Fail",
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
-								"message": "Failed to copy postTypes",
+								"message": "PostType files were not copied from the source",
 								"errorCode": "CopyFailure"
 							}
 						}
